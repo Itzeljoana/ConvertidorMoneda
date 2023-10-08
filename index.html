@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./assets/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container lineas-verdes">
+        <h1 class="linea">Conversor de moneda nacional</h1>
+        <div class="div">
+            <input type="number" id="dinero"  placeholder="Ingrese la cantidad" class="cantidad" >
+            <label for="monedaConver">Moneda a convertir: </label>
+            <select id="monedaConver" class="select">
+                <option value="">Seleccione moneda</option>
+                <option value="dolar_intercambio">Dolar</option>
+                <option value="euro">Euro</option>
+                <option value="bitcoin">Bitcoin</option>
+            </select>
+            <button onclick="obtenerCambio()">Convertir</button>
+        </div>
+        
+        <h1 id="mostrarValor"></h1>
+        <canvas id="chart"></canvas>
+    </div>
+    
+    <script src="./assets/script.js"></script>
+</body>
+</html>
