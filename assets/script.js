@@ -16,26 +16,29 @@ monedaConver.addEventListener("change", function (){
 });
 
 async function obtenerCambio() {
-    const res = await fetch("https://mindicador.cl/api/");
-    const monedas = await res.json();
-    const encontrarMoneda = monedas[valorSeleccionado];
-    const valorConver = encontrarMoneda.valor * valorConvertido;
+    try{
+        const res = await fetch("https://mindicador.cl/api/");
+        if(!res.ok){
+            throw new Error (`Error en los datos ${res.status}`)
+        }
+        const monedas = await res.json();
+        const encontrarMoneda = monedas[valorSeleccionado];
+        const valorConver = encontrarMoneda.valor * valorConvertido;
 
-    const resHistorial = await fetch(`https://mindicador.cl/api/${valorSeleccionado}?ultimos=10`);
-    const historial = await resHistorial.json();
-    
-  
-    const fechas = historial.serie.map(item => item.fecha);
-    const valores = historial.serie.map(item => item.valor);
-    
-    
-    const ctx = document.getElementById("chart").getContext("2d");
-    
-    new Chart(ctx, {
-        type: "line",
-        data: {
-            labels: fechas,
-            datasets: [{
+        const resHistorial = await fetch(`https://mindicador.cl/api/${valorSeleccionado}?ultimos=10`);
+        if(!resHistorial){
+            throw new Error (`Error en los datos ${resHistorial.status}`)
+        }
+        const historial = await resHistorial.json();
+        const fechas = historial.serie.map(item => item.fecha);
+        const valores = historial.serie.map(item => item.valor);
+        
+        const ctx = document.getElementById("chart").getContext("2d");
+        new Chart(ctx, {
+            type: "line",
+            data: {
+                labels: fechas,
+                datasets: [{
                 label: `Historial de ${encontrarMoneda.nombre}`,
                 data: valores,
                 borderColor: "green",
@@ -46,6 +49,8 @@ async function obtenerCambio() {
         },
     });
     
-    mostrarValor.innerHTML = `El valor convertido de  ${encontrarMoneda.nombre} es: $${valorConver}`;
+        mostrarValor.innerHTML = `El valor convertido de  ${encontrarMoneda.nombre} es: $${valorConver}`;
+    } catch (error) {
+        mostrarValor.innerHTML = `Error  ${encontrarMoneda.nombre} es: $${error.menssage}`;
+    }
 }
-
